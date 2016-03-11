@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Awesome Presentation</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style type="text/css">
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Droid Serif'; }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+# My Awesome Presentation
+
+???
+
+Notes for the _first_ slide!
+
+---
+
+# Agenda
+
+1. Introduction
+2. Deep-dive
+3. ...
+
+[NOTE]: Note that you need remark.js alongside this html file, but no internet connection.
+---
+
+# Introduction
+
+### Old way - *external iteration* :
+
+```java
+int count = 0;
+for (Artist artist : allArtists) {
+    if (artist.isFrom("London")) {
+        count++;
+    }
+}
+```
+
+--
+
+_Old way_? Give me a break, what's wrong with it?
+
+--
+- hard to understand what it does
+--
+
+- it does three things at once: 
+  * it iterates over a colletion
+  * it applies some condition for each element 
+  * it increments some previously created variable
+
+---
+
+# Iteration:
+
+```java
+Iterator<Artist> iterator = allArtists.iterator();
+while(iterator.hasNext()) {
+    Artist artist = iterator.next();
+    if (artist.isFrom("London")) {
+        count++;
+    }
+}```
+
+--
+
+<center><img src='image1.png' width="250" /></center>
+
+--
+
+<center>It mixes <strong>what</strong> you are doing with <strong>how</strong> you are doing it.</center>
+
+---
+
+# Internal iteration
+
+```java
+long count = allArtists.stream()
+                       .filter(artist -> artist.isFrom("London"))
+                       .count();```
+
+--
+
+<center><img src='image2.png' width="250" /></center>
+
+--
+
+- two operations:
+  * _filter_
+  * _count_
+--
+
+- but filtering is lazy
+--
+
+- _count_ is _eager_
+
+---
+
+# Lazy? Eager? What do you mean?
+
+```java
+List result = artists.stream()
+        .filter(artist -> artist.isFrom("London"))
+        .map(Artist::getName)
+        .map(String::toUpperCase)
+        .filter(name -> name.startsWith("a"))
+        .collect(Collectors.toList());```
+
+--
+
+### Lazy: _map_, _filter_
+
+--
+
+### Eager: _collect_
+
+---
+
+# Why won't just we use _forEach_?
+
+### With side-effects:
+
+```java
+ArrayList<String> results = new ArrayList<>();
+stream.filter(s -> pattern.matcher(s).matches())
+      .forEach(s -> results.add(s));```
+
+--
+
+### Without side-effects:
+
+```java
+List<String>results = stream.filter(s -> pattern.matcher(s).matches())
+                            .collect(Collectors.toList());```
+
+--
+
+## <center>Not only it looks better but it is _thread-safe_ !</center>
+
+---
+
+# Eager methods:
+
+- collect
+- toArray
+
+--
+- reduce
+- max
+- min
+- count
+
+--
+- allMatch
+- anyMatch
+- noneMatch
+
+--
+- findAny
+- findFirst
+
+---
+
+# Lazy methods:
+
+- filter
+- map (mapToDouble, mapToInt, mapToLong)
+- flatMap (flatMapToDouble, flatMapToInt, flatMapToLong)
+
+--
+- distinct
+- limit
+- sorted
+
+--
+- peek
+- skip
+
+
+---
+
+# map
+
+<center><img src='map.png' width="250" /></center>
+
+```java
+<R> Stream<R> map(Function<? super T, ? extends R> mapper);
+```
+
+--
+
+## <center>example1</center>
+## <center>example2</center>
+## <center>example3</center>
+
+---
+
+# filter
+
+<center><img src='filter.png' width="250" /></center>
+
+## <center>example4</center>
+
+---
+
+# reduce
+
+<center><img src='reduce.png' width="250" /></center>
+
+## <center>example5</center>
+## <center>example6</center>
+## <center>example7</center>
+
+
+    </textarea>
+    <script src="out/remark.js" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
