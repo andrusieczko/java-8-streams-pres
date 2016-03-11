@@ -205,15 +205,19 @@ List<String>results = stream.filter(s -> pattern.matcher(s).matches())
 
 --
 
-## <center>example1</center>
-## <center>example2</center>
-## <center>example3</center>
+## <center>example1, example2, example3</center>
 
 ---
 
 # filter
 
+```java
+Stream<T> filter(Predicate<? super T> predicate);
+```
+
 <center><img src='filter.png' width="250" /></center>
+
+--
 
 ## <center>example4</center>
 
@@ -221,12 +225,89 @@ List<String>results = stream.filter(s -> pattern.matcher(s).matches())
 
 # reduce
 
-<center><img src='reduce.png' width="250" /></center>
+<center><img src='reduce.png' width="150" /></center>
 
-## <center>example5</center>
-## <center>example6</center>
-## <center>example7</center>
+```java
+Optional<T> reduce(BinaryOperator<T> accumulator);
 
+T reduce(T identity, BinaryOperator<T> accumulator);
+
+<U> U reduce(U identity,
+             BiFunction<U, ? super T, U> accumulator,
+             BinaryOperator<U> combiner);
+```
+
+--
+
+## <center>example5, example6, example7</center>
+
+---
+
+# Exercises from the book
+
+https://github.com/RichardWarburton/java-8-lambdas-exercises
+
+---
+
+# Clojure vs. Java: `map` using `reduce`
+
+```clojure
+(defn my-map
+  "Implementation of `map` using `reduce`"
+  [f coll]
+  (reduce (fn [acc x] (conj acc (f x))) [] coll))
+
+(deftest test-map
+  (is (= (map inc [1 2 3]) (my-map inc [1 2 3]))))
+```
+
+--
+
+```java
+public static <I, O> List<O> map(Stream<I> stream, Function<I, O> mapper) {
+    return stream.reduce(new ArrayList<O>(), (acc, item) -> {
+        List<O> list = new ArrayList<>(acc);
+        list.add(mapper.apply(item));
+        return list;
+    }, (List<O> left, List<O> right) -> {
+        List<O> newLeft = new ArrayList<>(left);
+        newLeft.addAll(right);
+        return newLeft;
+    });
+}
+```
+
+---
+
+# Clojure vs. Java: `filter` using `reduce`
+
+```clojure
+(defn my-filter
+  "Implementation of `filter` using `reduce`"
+  [f coll]
+  (reduce (fn [acc x] (if (f x) (conj acc x) acc)) [] coll))
+
+(deftest test-filter
+  (is (= (filter odd? [1 2 3]) (test-filter odd? [1 2 3]))))
+```
+
+--
+
+```java
+public static <I> List<I> filter(Stream<I> stream, Predicate<I> predicate) {
+    return stream.reduce(new ArrayList<I>(), (List<I> acc, I item) -> {
+        List<I> list = new ArrayList<>(acc);
+        if (predicate.test(item)) {
+            list.add(item);
+        }
+        return list;
+    }, (List<I> left, List<I> right) -> {
+        List<I> newLeft = new ArrayList<>(left);
+        newLeft.addAll(right);
+        return newLeft;
+    });
+}
+```
 
     </textarea>
     <script src="out/remark.js" type="text/javascript">
