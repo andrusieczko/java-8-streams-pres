@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>My Awesome Presentation</title>
+    <title>Java 8: streams</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <style type="text/css">
       @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
@@ -21,21 +21,17 @@
 
 class: center, middle
 
-# My Awesome Presentation
-
-???
-
-Notes for the _first_ slide!
+# Java 8: streams
 
 ---
 
 # Agenda
 
 1. Introduction
-2. Deep-dive
-3. ...
+2. Internal/external iteration
+3. Lazy / eager
+4. map / filter / reduce
 
-[NOTE]: Note that you need remark.js alongside this html file, but no internet connection.
 ---
 
 # Introduction
@@ -66,7 +62,7 @@ _Old way_? Give me a break, what's wrong with it?
 
 ---
 
-# Iteration:
+# Internal iteration:
 
 ```java
 Iterator<Artist> iterator = allArtists.iterator();
@@ -87,7 +83,7 @@ while(iterator.hasNext()) {
 
 ---
 
-# Internal iteration
+# External iteration
 
 ```java
 long count = allArtists.stream()
