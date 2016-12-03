@@ -1,143 +1,295 @@
-# remark
+# Java 8 streams presentation using https://github.com/gnab/remark
 
-[![Build Status](https://travis-ci.org/gnab/remark.svg?branch=develop)](https://travis-ci.org/gnab/remark)
-[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4ADT275DY7JTG)
+```
+npm install
+bower install
+grunt
+go to localhost:8000
+```
 
-A simple, in-browser, markdown-driven slideshow tool targeted at people who know their way around HTML and CSS, featuring:
+To change, edit `boilerplate-local.html`.
 
-- Markdown formatting, with smart extensions
-- Presenter mode, with cloned slideshow view
-- Syntax highlighting, supporting a range of languages
-- Slide scaling, thus similar appearance on all devices / resolutions
-- Touch support for smart phones and pads, i.e. swipe to navigate slides
+Presentation below (in markdown):
 
-Check out [this remark slideshow](http://gnab.github.com/remark) for a brief introduction.
-
-To render your Markdown-based slideshow on the fly, checkout [Remarkise](https://gnab.github.io/remark/remarkise).
-
-### Getting Started
-
-It takes only a few, simple steps to get up and running with remark:
-
-1. Create a HTML file to contain your slideshow (see below)
-2. Open the HTML file in a decent browser
-3. Edit the Markdown and/or CSS styles as needed, save and refresh!
-
-Below is a boilerplate HTML file to get you started:
-
-```html
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Title</title>
-    <meta charset="utf-8">
-    <style>
-      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
-      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
-      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
-
-      body { font-family: 'Droid Serif'; }
-      h1, h2, h3 {
-        font-family: 'Yanone Kaffeesatz';
-        font-weight: normal;
-      }
-      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
-    </style>
-  </head>
-  <body>
-    <textarea id="source">
-
-class: center, middle
-
-# Title
+# Java 8 streams
 
 ---
 
 # Agenda
 
 1. Introduction
-2. Deep-dive
-3. ...
+2. Internal/external iteration
+3. Lazy / eager
+4. map / filter / reduce
 
 ---
 
 # Introduction
 
-    </textarea>
-    <script src="https://gnab.github.io/remark/downloads/remark-latest.min.js">
-    </script>
-    <script>
-      var slideshow = remark.create();
-    </script>
-  </body>
-</html>
+### Old way - *external iteration* :
+
+```java
+int count = 0;
+for (Artist artist : allArtists) {
+    if (artist.isFrom("London")) {
+        count++;
+    }
+}
 ```
 
-### Moving On
+--
 
-For more information on using remark, please check out the [wiki](http://github.com/gnab/remark/wiki) pages.
+_Old way_? Give me a break, what's wrong with it?
 
-### Real-world remark slideshows
+--
+- hard to understand what it does
+--
 
-On using remark:
+- it does three things at once: 
+  * it iterates over a colletion
+  * it applies some condition for each element 
+  * it increments some previously created variable
 
-- [The Official remark Slideshow](http://gnab.github.com/remark)
-- [Coloured Terminal Listings in remark](http://joshbode.github.com/remark/ansi.html) by [joshbode](https://github.com/joshbode)
+---
 
-Other interesting stuff:
+# Internal iteration:
 
-- [gnab.github.com/editorjs](http://gnab.github.com/editorjs)
-- [judoole.github.com/GroovyBDD](http://judoole.github.com/GroovyBDD)
-- [kjbekkelund.github.com/nith-coffeescript](http://kjbekkelund.github.com/nith-coffeescript)
-- [kjbekkelund.github.com/js-architecture-backbone](http://kjbekkelund.github.com/js-architecture-backbone)
-- [bekkopen.github.com/infrastruktur-som-kode](http://bekkopen.github.com/infrastruktur-som-kode)
-- [ivarconr.github.com/Test-Driven-Web-Development/slides](http://ivarconr.github.com/Test-Driven-Web-Development/slides)
-- [havard.github.com/node.js-intro-norwegian](http://havard.github.com/node.js-intro-norwegian)
-- [mobmad.github.com/js-tdd-erfaringer](http://mobmad.github.com/js-tdd-erfaringer)
-- [torgeir.github.com/busterjs-lightning-talk](http://torgeir.github.com/busterjs-lightning-talk)
-- [roberto.github.com/ruby-sinform-2012](http://roberto.github.com/ruby-sinform-2012)
-- [http://asmeurer.github.io/python3-presentation/slides.html](http://asmeurer.github.io/python3-presentation/slides.html)
-- [Lecture notes using remark](http://ozan.keysan.me/ee361/)
-- [Big Data in Time - Progress and Challenges from Oceanography](http://www.jmlilly.net/talks/bigdata16.html)
+```java
+Iterator<Artist> iterator = allArtists.iterator();
+while(iterator.hasNext()) {
+    Artist artist = iterator.next();
+    if (artist.isFrom("London")) {
+        count++;
+    }
+}```
 
-### Other systems integrating with remark
+--
 
-- [http://platon.io](http://platon.io)
-- [http://www.markdowner.com](http://www.markdowner.com)
-- [http://remarks.sinaapp.com](http://remarks.sinaapp.com/)
-- [Remarkymark (Remark.js in Middleman)](https://github.com/camerond/remarkymark)
+<center><img src='image1.png' width="250" /></center>
 
-### Contributors
+--
 
-- [kjbekkelund](https://github.com/kjbekkelund)
-- [DanTup](https://github.com/DanTup)
-- [freakboy3742](https://github.com/freakboy3742)
-- [nanoant](https://github.com/nanoant)
-- [gurjeet](https://github.com/gurjeet)
-- [torgeir](https://github.com/torgeir)
-- [junderhill](https://github.com/junderhill)
-- [gureckis](https://github.com/gureckis)
-- [hfukada](https://github.com/hfukada)
-- [danielstankiewicz](https://github.com/danielstankiewicz)
-- [andrewgaul](https://github.com/andrewgaul)
-- [tripu](https://github.com/tripu)
-- [kud](https://github.com/kud)
-- [toenuff](https://github.com/toenuff)
-- [obfusk](https://github.com/obfusk)
-- [trumbitta](https://github.com/trumbitta)
-- [peter50216](https://github.com/peter50216)
-- [mhor](https://github.com/mhor)
-- [roberto](https://github.com/roberto)
-- [camerond](https://github.com/camerond)
-- [avdv](https://github.com/avdv)
-- [WouterSioen](https://github.com/WouterSioen)
-- [tchajed](https://github.com/tchajed)
-- [venthur](https://github.com/venthur)
-- [mathiasbynens](https://github.com/mathiasbynens)
-- [aminb](https://github.com/aminb)
-- [sol](https://github.com/sol)
+<center>It mixes <strong>what</strong> you are doing with <strong>how</strong> you are doing it.</center>
 
-### License
+---
 
-remark is licensed under the MIT license. See LICENSE for further
-details.
+# External iteration
+
+```java
+long count = allArtists.stream()
+                       .filter(artist -> artist.isFrom("London"))
+                       .count();```
+
+--
+
+<center><img src='image2.png' width="250" /></center>
+
+--
+
+- two operations:
+  * _filter_
+  * _count_
+--
+
+- but filtering is lazy
+--
+
+- _count_ is _eager_
+
+---
+
+# Lazy? Eager? What do you mean?
+
+```java
+List result = artists.stream()
+        .filter(artist -> artist.isFrom("London"))
+        .map(Artist::getName)
+        .map(String::toUpperCase)
+        .filter(name -> name.startsWith("a"))
+        .collect(Collectors.toList());```
+
+--
+
+### Lazy: _map_, _filter_
+
+--
+
+### Eager: _collect_
+
+---
+
+# Why won't just we use _forEach_?
+
+### With side-effects:
+
+```java
+ArrayList<String> results = new ArrayList<>();
+stream.filter(s -> pattern.matcher(s).matches())
+      .forEach(s -> results.add(s));```
+
+--
+
+### Without side-effects:
+
+```java
+List<String>results = stream.filter(s -> pattern.matcher(s).matches())
+                            .collect(Collectors.toList());```
+
+--
+
+## <center>Not only it looks better but it is _thread-safe_ !</center>
+
+---
+
+# Eager methods:
+
+- collect
+- toArray
+
+--
+- reduce
+- max
+- min
+- count
+
+--
+- allMatch
+- anyMatch
+- noneMatch
+
+--
+- findAny
+- findFirst
+
+---
+
+# Lazy methods:
+
+- filter
+- map (mapToDouble, mapToInt, mapToLong)
+- flatMap (flatMapToDouble, flatMapToInt, flatMapToLong)
+
+--
+- distinct
+- limit
+- sorted
+
+--
+- peek
+- skip
+
+
+---
+
+# map
+
+<center><img src='map.png' width="250" /></center>
+
+```java
+<R> Stream<R> map(Function<? super T, ? extends R> mapper);
+```
+
+--
+
+## <center>example1, example2, example3</center>
+
+---
+
+# filter
+
+```java
+Stream<T> filter(Predicate<? super T> predicate);
+```
+
+<center><img src='filter.png' width="250" /></center>
+
+--
+
+## <center>example4</center>
+
+---
+
+# reduce
+
+<center><img src='reduce.png' width="150" /></center>
+
+```java
+Optional<T> reduce(BinaryOperator<T> accumulator);
+
+T reduce(T identity, BinaryOperator<T> accumulator);
+
+<U> U reduce(U identity,
+             BiFunction<U, ? super T, U> accumulator,
+             BinaryOperator<U> combiner);
+```
+
+--
+
+## <center>example5, example6, example7</center>
+
+---
+
+# Exercises from the book
+
+https://github.com/RichardWarburton/java-8-lambdas-exercises
+
+---
+
+# Clojure vs. Java: `map` using `reduce`
+
+```clojure
+(defn my-map
+  "Implementation of `map` using `reduce`"
+  [f coll]
+  (reduce (fn [acc x] (conj acc (f x))) [] coll))
+
+(deftest test-map
+  (is (= (map inc [1 2 3]) (my-map inc [1 2 3]))))
+```
+
+--
+
+```java
+public static <I, O> List<O> map(Stream<I> stream, Function<I, O> mapper) {
+    return stream.reduce(new ArrayList<O>(), (acc, item) -> {
+        List<O> list = new ArrayList<>(acc);
+        list.add(mapper.apply(item));
+        return list;
+    }, (List<O> left, List<O> right) -> {
+        List<O> newLeft = new ArrayList<>(left);
+        newLeft.addAll(right);
+        return newLeft;
+    });
+}
+```
+
+---
+
+# Clojure vs. Java: `filter` using `reduce`
+
+```clojure
+(defn my-filter
+  "Implementation of `filter` using `reduce`"
+  [f coll]
+  (reduce (fn [acc x] (if (f x) (conj acc x) acc)) [] coll))
+
+(deftest test-filter
+  (is (= (filter odd? [1 2 3]) (test-filter odd? [1 2 3]))))
+```
+
+--
+
+```java
+public static <I> List<I> filter(Stream<I> stream, Predicate<I> predicate) {
+    return stream.reduce(new ArrayList<I>(), (List<I> acc, I item) -> {
+        List<I> list = new ArrayList<>(acc);
+        if (predicate.test(item)) {
+            list.add(item);
+        }
+        return list;
+    }, (List<I> left, List<I> right) -> {
+        List<I> newLeft = new ArrayList<>(left);
+        newLeft.addAll(right);
+        return newLeft;
+    });
+}
