@@ -2,7 +2,7 @@
 
 ```
 npm install
-bower install
+node make
 grunt
 go to localhost:8000
 ```
